@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from 'react'
-import { Avatar, Button, Card, Col, Form, Row } from 'antd'
+import { Avatar, Button, Card, Col, Form, Row, Spin } from 'antd'
 import {
   ChatItem,
   MessageBox,
@@ -13,43 +13,42 @@ import {
 import 'react-chat-elements/dist/main.css'
 import { Input, Space } from 'antd'
 import { AudioOutlined } from '@ant-design/icons'
+import { postBotMessage } from '@/API/API'
 
 const { Search } = Input
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
-  const [dataSource, setDataSource] = useState<MessageType[]>([
-    {
-      id: 0,
-      focus: false,
-      date: new Date(),
-      titleColor: '#005DFF',
-      forwarded: false,
-      replyButton: false,
-      removeButton: false,
-      status: 'sent',
-      notch: true,
-      retracted: false,
-      position: 'left',
-      type: 'text',
-      title: (
-        <Row align={'middle'}>
-          <Col span={8}>
-            <Avatar
-              src='https://d2cbg94ubxgsnp.cloudfront.net/Pictures/2000xAny/9/9/2/512992_shutterstock_715962319converted_749269.png'
-              alt='avatar'
-            />
-          </Col>
-          <Col span={16}>
-            <div>HEALTH BOT</div>
-          </Col>
-        </Row>
-      ),
-      text: 'Hello, what can i help you?',
-    }
-  ])
+  let botMessage: MessageType = {
+    id: 0,
+    focus: false,
+    date: new Date(),
+    titleColor: '#005DFF',
+    forwarded: false,
+    replyButton: false,
+    removeButton: false,
+    status: 'sent',
+    notch: true,
+    retracted: false,
+    position: 'left',
+    type: 'text',
+    title: (
+      <Row align={'middle'}>
+        <Col span={8}>
+          <Avatar
+            src='https://d2cbg94ubxgsnp.cloudfront.net/Pictures/2000xAny/9/9/2/512992_shutterstock_715962319converted_749269.png'
+            alt='avatar'
+          />
+        </Col>
+        <Col span={16}>
+          <div>HEALTH BOT</div>
+        </Col>
+      </Row>
+    ),
+    text: 'Hello, what can i help you?'
+  }
 
-  let userMessage: any = {
+  let userMessage: MessageType = {
     id: 0,
     focus: false,
     date: new Date(),
@@ -66,6 +65,8 @@ export default function Home () {
     text: 'hello'
   }
 
+  const [dataSource, setDataSource] = useState<MessageType[]>([botMessage])
+
   const suffix = (
     <AudioOutlined
       style={{
@@ -76,16 +77,32 @@ export default function Home () {
   )
 
   const [form] = Form.useForm()
+  let messageId: number = 0
   const onFinish = (values?: any) => {
-    console.log(values)
-    userMessage = { ...userMessage, text: values.userMessage }
-
-    setDataSource([...dataSource, userMessage])
+    // console.log(values)
+    messageId++
+    userMessage = { ...userMessage, id: messageId, text: values.userMessage }
+    setDataSource(e => [...e, userMessage])
     form.resetFields()
+
+    dataSource.map((e: MessageType) => {
+      console.log(e)
+    })
+
+    botMessage = { ...botMessage, text: <Spin spinning /> }
+    setDataSource(e => [...e, botMessage])
+    postBotMessage(values.userMessage)
+      .then(res => {
+        botMessage = { ...botMessage, text: res.data.botMessage }
+        setDataSource(e => [...e, botMessage])
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   useEffect(() => {
-    // console.log(dataSource)
+    console.log(dataSource)
   }, [dataSource])
 
   return (
