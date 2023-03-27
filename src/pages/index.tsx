@@ -44,7 +44,7 @@ export default function Home () {
           <div>HEALTH BOT</div>
         </Col>
       </Row>
-    ),
+    ) as any,
     text: 'Hello, what can i help you?'
   }
 
@@ -89,7 +89,7 @@ export default function Home () {
       console.log(e)
     })
 
-    botMessage = { ...botMessage, text: <Spin spinning /> }
+    botMessage = { ...botMessage, text: (<Spin spinning />) as any }
     setDataSource(e => [...e, botMessage])
     postBotMessage(values.userMessage)
       .then(res => {

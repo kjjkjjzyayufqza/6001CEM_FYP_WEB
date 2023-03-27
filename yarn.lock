@@ -56,6 +56,11 @@
   dependencies:
     "regenerator-runtime" "^0.13.11"
 
+"@csstools/selector-specificity@^2.0.0":
+  "integrity" "sha512-+OJ9konv95ClSTOJCmMZqpd5+YGsB2S+x6w3E1oaM8UuR5j8nTNHYSz8c9BEPGDOCMQYIEEGlVPj/VY64iTbGw=="
+  "resolved" "https://registry.npmjs.org/@csstools/selector-specificity/-/selector-specificity-2.2.0.tgz"
+  "version" "2.2.0"
+
 "@ctrl/tinycolor@^3.4.0", "@ctrl/tinycolor@^3.6.0":
   "integrity" "sha512-/Z3l6pXthq0JvMYdUFyX9j0MaCltlIn6mfh9jLyQwg5aPKxkyNa0PTHtU1AlFXLNk55ZuAeJRcpvq+tmLfKmaQ=="
   "resolved" "https://registry.npmjs.org/@ctrl/tinycolor/-/tinycolor-3.6.0.tgz"
@@ -732,6 +737,14 @@
   dependencies:
     "postcss-selector-parser" "^6.0.10"
 
+"postcss-nesting@^11.2.2":
+  "integrity" "sha512-aOTiUniAB1bcPE6GGiynWRa6PZFPhOTAm5q3q5cem6QeSijIHHkWr6gs65ukCZMXeak8yXeZVbBJET3VM+HlhA=="
+  "resolved" "https://registry.npmjs.org/postcss-nesting/-/postcss-nesting-11.2.2.tgz"
+  "version" "11.2.2"
+  dependencies:
+    "@csstools/selector-specificity" "^2.0.0"
+    "postcss-selector-parser" "^6.0.10"
+
 "postcss-selector-parser@^6.0.10", "postcss-selector-parser@^6.0.11":
   "integrity" "sha512-zbARubNdogI9j7WY4nQJBiNqQf3sLS3wCP4WfOidu+p28LofJqDH1tcXypGrcmMHhDk2t9wGhCsYe/+szLTy1g=="
   "resolved" "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-6.0.11.tgz"
@@ -745,7 +758,7 @@
   "resolved" "https://registry.npmjs.org/postcss-value-parser/-/postcss-value-parser-4.2.0.tgz"
   "version" "4.2.0"
 
-"postcss@^8.0.0", "postcss@^8.0.9", "postcss@^8.1.0", "postcss@^8.2.14", "postcss@^8.4.21", "postcss@>=8.0.9":
+"postcss@^8.0.0", "postcss@^8.0.9", "postcss@^8.1.0", "postcss@^8.2.14", "postcss@^8.4", "postcss@^8.4.21", "postcss@>=8.0.9":
   "integrity" "sha512-tP7u/Sn/dVxK2NnruI4H9BG+x+Wxz6oeZ1cJ8P6G/PZY0IKk4k/63TDsQf2kQq3+qoJeLm2kIBUNlZe3zgb4Zg=="
   "resolved" "https://registry.npmjs.org/postcss/-/postcss-8.4.21.tgz"
   "version" "8.4.21"
