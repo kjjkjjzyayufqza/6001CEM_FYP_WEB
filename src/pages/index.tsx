@@ -3,7 +3,17 @@ import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
 import { useEffect, useState } from 'react'
-import { Avatar, Button, Card, Col, Form, Row, Spin } from 'antd'
+import {
+  Avatar,
+  Button,
+  Card,
+  Col,
+  Form,
+  Row,
+  Spin,
+  Upload,
+  UploadFile
+} from 'antd'
 import {
   ChatItem,
   MessageBox,
@@ -12,13 +22,16 @@ import {
 } from 'react-chat-elements'
 import 'react-chat-elements/dist/main.css'
 import { Input, Space } from 'antd'
-import { AudioOutlined } from '@ant-design/icons'
-import { postBotMessage } from '@/API/API'
+import { AudioOutlined, PlusOutlined } from '@ant-design/icons'
+import { postBotMessage, postImage } from '@/API/API'
+import { UploadImageBox } from '@/components/UploadImageBox'
 
 const { Search } = Input
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
+  const fileList: UploadFile[] = []
+
   let botMessage: MessageType = {
     id: 0,
     focus: false,
@@ -65,7 +78,52 @@ export default function Home () {
     text: 'hello'
   }
 
-  const [dataSource, setDataSource] = useState<MessageType[]>([botMessage])
+  let botFileMessage: MessageType = {
+    id: 0,
+    focus: false,
+    date: new Date(),
+    titleColor: '#005DFF',
+    forwarded: false,
+    replyButton: false,
+    removeButton: false,
+    status: 'sent',
+    notch: true,
+    retracted: false,
+    position: 'left',
+    type: 'text',
+    title: (
+      <Row align={'middle'}>
+        <Col span={8}>
+          <Avatar
+            src='https://d2cbg94ubxgsnp.cloudfront.net/Pictures/2000xAny/9/9/2/512992_shutterstock_715962319converted_749269.png'
+            alt='avatar'
+          />
+        </Col>
+        <Col span={16}>
+          <div>HEALTH BOT</div>
+        </Col>
+      </Row>
+    ) as any,
+    text: (
+      <Row>
+        <Col span={24}>Okay, can you upload the relevant photos?</Col>
+        <Col span={24}>
+          <UploadImageBox
+            onUploadDone={(message: string) => {
+              botMessage = {
+                ...botMessage,
+                status: 'sent',
+                text: message
+              }
+              setDataSource(e => [...e, botMessage])
+            }}
+          />
+        </Col>
+      </Row>
+    ) as any
+  }
+
+  const [dataSource, setDataSource] = useState<MessageType[]>([botFileMessage])
 
   const suffix = (
     <AudioOutlined
@@ -85,25 +143,34 @@ export default function Home () {
     setDataSource(e => [...e, userMessage])
     form.resetFields()
 
-    dataSource.map((e: MessageType) => {
-      console.log(e)
-    })
-
-    botMessage = { ...botMessage, text: (<Spin spinning />) as any }
-    setDataSource(e => [...e, botMessage])
-    postBotMessage(values.userMessage)
-      .then(res => {
-        botMessage = { ...botMessage, text: res.data.botMessage }
-        setDataSource(e => [...e, botMessage])
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    if (values.userMessage == 'image') {
+      setDataSource(e => [...e, botFileMessage])
+    } else {
+      botMessage = {
+        ...botMessage,
+        status: 'waiting',
+        text: (<Spin spinning />) as any
+      }
+      setDataSource(e => [...e, botMessage])
+      postBotMessage(values.userMessage)
+        .then(res => {
+          setDataSource(e => [
+            ...e.map(e => {
+              if (e.status == 'waiting') {
+                e.status = 'sent'
+                e.text = res.data.botMessage
+              }
+              return e
+            })
+          ])
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
   }
 
-  useEffect(() => {
-    console.log(dataSource)
-  }, [dataSource])
+  useEffect(() => {}, [dataSource])
 
   return (
     <div
