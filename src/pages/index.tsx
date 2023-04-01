@@ -25,86 +25,22 @@ import { Input, Space } from 'antd'
 import { AudioOutlined, PlusOutlined } from '@ant-design/icons'
 import { postBotMessage, postImage } from '@/API/API'
 import { UploadImageBox } from '@/components/UploadImageBox'
+import { MessageModel, MessageModelType } from '@/MODEL/MessageModel'
 
 const { Search } = Input
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
-  const fileList: UploadFile[] = []
 
-  let botMessage: MessageType = {
-    id: 0,
-    focus: false,
-    date: new Date(),
-    titleColor: '#005DFF',
-    forwarded: false,
-    replyButton: false,
-    removeButton: false,
-    status: 'sent',
-    notch: true,
-    retracted: false,
-    position: 'left',
-    type: 'text',
-    title: (
-      <Row align={'middle'}>
-        <Col span={8}>
-          <Avatar
-            src='https://d2cbg94ubxgsnp.cloudfront.net/Pictures/2000xAny/9/9/2/512992_shutterstock_715962319converted_749269.png'
-            alt='avatar'
-          />
-        </Col>
-        <Col span={16}>
-          <div>HEALTH BOT</div>
-        </Col>
-      </Row>
-    ) as any,
-    text: 'Hello, what can i help you?'
-  }
+  let botMessage: any = MessageModel({
+    type: MessageModelType.BotMessage
+  })
 
-  let userMessage: MessageType = {
-    id: 0,
-    focus: false,
-    date: new Date(),
-    titleColor: '#464646',
-    forwarded: false,
-    replyButton: false,
-    removeButton: false,
-    status: 'sent',
-    notch: true,
-    retracted: false,
-    position: 'right',
-    type: 'text',
-    title: '',
-    text: 'hello'
-  }
+  let userMessage: any = MessageModel({ type: MessageModelType.UserMessage })
 
-  let botFileMessage: MessageType = {
-    id: 0,
-    focus: false,
-    date: new Date(),
-    titleColor: '#005DFF',
-    forwarded: false,
-    replyButton: false,
-    removeButton: false,
-    status: 'sent',
-    notch: true,
-    retracted: false,
-    position: 'left',
-    type: 'text',
-    title: (
-      <Row align={'middle'}>
-        <Col span={8}>
-          <Avatar
-            src='https://d2cbg94ubxgsnp.cloudfront.net/Pictures/2000xAny/9/9/2/512992_shutterstock_715962319converted_749269.png'
-            alt='avatar'
-          />
-        </Col>
-        <Col span={16}>
-          <div>HEALTH BOT</div>
-        </Col>
-      </Row>
-    ) as any,
-    text: (
+  let botFileMessage: any = MessageModel({
+    type: MessageModelType.BotFileMessage,
+    Children: (
       <Row>
         <Col span={24}>Okay, can you upload the relevant photos?</Col>
         <Col span={24}>
@@ -120,8 +56,8 @@ export default function Home () {
           />
         </Col>
       </Row>
-    ) as any
-  }
+    )
+  })
 
   const [dataSource, setDataSource] = useState<MessageType[]>([botFileMessage])
 
@@ -137,7 +73,6 @@ export default function Home () {
   const [form] = Form.useForm()
   let messageId: number = 0
   const onFinish = (values?: any) => {
-    // console.log(values)
     messageId++
     userMessage = { ...userMessage, id: messageId, text: values.userMessage }
     setDataSource(e => [...e, userMessage])
@@ -170,7 +105,9 @@ export default function Home () {
     }
   }
 
-  useEffect(() => {}, [dataSource])
+  useEffect(() => {
+    // console.log(dataSource)
+  }, [dataSource])
 
   return (
     <div
@@ -196,9 +133,7 @@ export default function Home () {
               <Form
                 form={form}
                 name='basic'
-                // labelCol={{ span: 8 }}
-                // wrapperCol={{ span: 16 }}
-                // style={{ maxWidth: 600 }}
+
                 initialValues={{ remember: true }}
                 onFinish={e => {
                   onFinish(e)
