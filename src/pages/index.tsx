@@ -26,12 +26,12 @@ import { AudioOutlined, PlusOutlined } from '@ant-design/icons'
 import { postBotMessage, postImage } from '@/API/API'
 import { UploadImageBox } from '@/components/UploadImageBox'
 import { MessageModel, MessageModelType } from '@/MODEL/MessageModel'
+import { FeedBackBox } from '@/components/FeedBackBox'
 
 const { Search } = Input
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home () {
-
   let botMessage: any = MessageModel({
     type: MessageModelType.BotMessage
   })
@@ -42,14 +42,18 @@ export default function Home () {
     type: MessageModelType.BotFileMessage,
     Children: (
       <Row>
-        <Col span={24}>Okay, can you upload the relevant photos?</Col>
+        <Col span={24}>
+          <>
+            <p className='text-lg'>You can upload relevant skin images to predict diseases.</p>
+          </>
+        </Col>
         <Col span={24}>
           <UploadImageBox
             onUploadDone={(message: string) => {
               botMessage = {
                 ...botMessage,
                 status: 'sent',
-                text: message
+                text: <p className='text-lg'>{message}</p>
               }
               setDataSource(e => [...e, botMessage])
             }}
@@ -59,7 +63,7 @@ export default function Home () {
     )
   })
 
-  const [dataSource, setDataSource] = useState<MessageType[]>([botFileMessage])
+  const [dataSource, setDataSource] = useState<MessageType[]>([])
 
   const suffix = (
     <AudioOutlined
@@ -89,25 +93,62 @@ export default function Home () {
       setDataSource(e => [...e, botMessage])
       postBotMessage(values.userMessage)
         .then(res => {
+          if (res.data.botMessage.includes('skin issue')) {
+            setDataSource(e => [
+              ...e.map(e => {
+                if (e.status == 'waiting') {
+                  e.status = 'sent'
+                  e.text = (
+                    <>
+                      <p className='text-lg'>{res.data.botMessage}</p>
+                      <FeedBackBox></FeedBackBox>
+                    </>
+                  ) as any
+                }
+                return e
+              }),
+              botFileMessage
+            ])
+          } else {
+            setDataSource(e => [
+              ...e.map(e => {
+                if (e.status == 'waiting') {
+                  e.status = 'sent'
+                  e.text = (
+                    <>
+                      <p className='text-lg'>{res.data.botMessage}</p>
+                      <FeedBackBox></FeedBackBox>
+                    </>
+                  ) as any
+                }
+                return e
+              })
+            ])
+          }
+        })
+        .catch(err => {
+          console.log(err)
           setDataSource(e => [
             ...e.map(e => {
               if (e.status == 'waiting') {
                 e.status = 'sent'
-                e.text = res.data.botMessage
+                e.text = (
+                  <p className='text-lg text-red-500'>
+                    Network Error, Please try again
+                  </p>
+                ) as any
               }
               return e
             })
           ])
         })
-        .catch(err => {
-          console.log(err)
-        })
     }
   }
 
   useEffect(() => {
-    // console.log(dataSource)
-  }, [dataSource])
+    setDataSource([botFileMessage])
+    return () => {}
+  }, [])
 
   return (
     <div
@@ -119,8 +160,8 @@ export default function Home () {
           <div className='md:flex-shrink-0'>
             <div className='h-48 w-full object-cover md:h-full md:w-48 bg-sky-400' />
           </div>
-          <div className='p-8 h-full flex flex-col justify-between w-full'>
-            <div className='max-h-[90%] overflow-auto'>
+          <div className='h-full flex flex-col justify-between w-full'>
+            <div className='max-h-[90%] overflow-auto p-4'>
               <MessageList
                 className='message-list '
                 lockable={true}
@@ -129,11 +170,11 @@ export default function Home () {
                 referance={null}
               />
             </div>
-            <div className='h-12'>
+            <div className='h-12 bg-slate-200 rounded-full p-1 w-11/12 mx-auto shadow-md mb-2'>
               <Form
+                className={'px-8 h-full'}
                 form={form}
                 name='basic'
-
                 initialValues={{ remember: true }}
                 onFinish={e => {
                   onFinish(e)
@@ -141,28 +182,25 @@ export default function Home () {
                 onFinishFailed={() => {}}
                 autoComplete='off'
               >
-                <Row align={'middle'}>
-                  <Col span={18}>
-                    <Form.Item
-                      label=''
-                      name='userMessage'
-                      // rules={[{ required: true, message: '' }]}
-                    >
-                      <Input
-                        placeholder='input message'
-                        size='large'
-                        suffix={suffix}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col span={6}>
-                    <Form.Item>
-                      <Button type='primary' htmlType='submit' className='h-10'>
-                        Send
-                      </Button>
-                    </Form.Item>
-                  </Col>
-                </Row>
+                <div className='flex flex-row '>
+                  <Form.Item
+                    label=''
+                    name='userMessage'
+                    className='w-full'
+                    // rules={[{ required: true, message: '' }]}
+                  >
+                    <Input
+                      placeholder='input message'
+                      size='large'
+                      suffix={suffix}
+                    />
+                  </Form.Item>
+                  <Form.Item className='ml-2'>
+                    <Button type='primary' htmlType='submit' className='h-10'>
+                      Send
+                    </Button>
+                  </Form.Item>
+                </div>
               </Form>
             </div>
           </div>

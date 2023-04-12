@@ -1,4 +1,6 @@
+import { FeedBackBox } from '@/components/FeedBackBox'
 import { Avatar, Col, Row } from 'antd'
+import moment from 'moment'
 import React, { Children, FC } from 'react'
 import { MessageType } from 'react-chat-elements'
 
@@ -15,7 +17,7 @@ export const MessageModel: FC<{ type: MessageModelType; Children?: any }> = ({
   let botMessage: MessageType = {
     id: 0,
     focus: false,
-    date: new Date(),
+    date: moment().format() as any,
     titleColor: '#005DFF',
     forwarded: false,
     replyButton: false,
@@ -28,17 +30,18 @@ export const MessageModel: FC<{ type: MessageModelType; Children?: any }> = ({
     title: (
       <Row align={'middle'}>
         <Col span={8}>
-          <Avatar
-            src='https://d2cbg94ubxgsnp.cloudfront.net/Pictures/2000xAny/9/9/2/512992_shutterstock_715962319converted_749269.png'
-            alt='avatar'
-          />
+          <Avatar src='botIcon.png' alt='avatar' />
         </Col>
         <Col span={16}>
           <div>HEALTH BOT</div>
         </Col>
       </Row>
     ) as any,
-    text: 'Hello, what can i help you?'
+    text: (
+      <p className='text-lg'>
+        Hello, what can i help you?
+      </p>
+    ) as any
   }
 
   let userMessage: MessageType = {
@@ -74,10 +77,7 @@ export const MessageModel: FC<{ type: MessageModelType; Children?: any }> = ({
     title: (
       <Row align={'middle'}>
         <Col span={8}>
-          <Avatar
-            src='https://d2cbg94ubxgsnp.cloudfront.net/Pictures/2000xAny/9/9/2/512992_shutterstock_715962319converted_749269.png'
-            alt='avatar'
-          />
+          <Avatar src='botIcon.png' alt='avatar' />
         </Col>
         <Col span={16}>
           <div>HEALTH BOT</div>
