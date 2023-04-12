@@ -27,6 +27,7 @@ import { postBotMessage, postImage } from '@/API/API'
 import { UploadImageBox } from '@/components/UploadImageBox'
 import { MessageModel, MessageModelType } from '@/MODEL/MessageModel'
 import { FeedBackBox } from '@/components/FeedBackBox'
+import { ThreeDots } from 'react-loader-spinner'
 
 const { Search } = Input
 const inter = Inter({ subsets: ['latin'] })
@@ -44,7 +45,9 @@ export default function Home () {
       <Row>
         <Col span={24}>
           <>
-            <p className='text-lg'>You can upload relevant skin images to predict diseases.</p>
+            <p className='text-lg'>
+              You can upload relevant skin images to predict diseases.
+            </p>
           </>
         </Col>
         <Col span={24}>
@@ -88,7 +91,17 @@ export default function Home () {
       botMessage = {
         ...botMessage,
         status: 'waiting',
-        text: (<Spin spinning />) as any
+        text: (
+          <ThreeDots
+            height='30'
+            width='30'
+            radius='5'
+            color='#808080'
+            ariaLabel='three-dots-loading'
+            wrapperStyle={{}}
+            visible={true}
+          />
+        ) as any
       }
       setDataSource(e => [...e, botMessage])
       postBotMessage(values.userMessage)
@@ -146,7 +159,7 @@ export default function Home () {
   }
 
   useEffect(() => {
-    setDataSource([botFileMessage])
+    setDataSource([botMessage])
     return () => {}
   }, [])
 
@@ -158,7 +171,7 @@ export default function Home () {
       <div className=' bg-slate-50 rounded-xl shadow-md md:max-w-4xl w-full'>
         <div className='md:flex h-full '>
           <div className='md:flex-shrink-0'>
-            <div className='h-48 w-full object-cover md:h-full md:w-48 bg-sky-400' />
+            <div className='h-48 w-full object-cover md:h-full md:w-48 bg-sky-400 rounded-l-lg' />
           </div>
           <div className='h-full flex flex-col justify-between w-full'>
             <div className='max-h-[90%] overflow-auto p-4'>
