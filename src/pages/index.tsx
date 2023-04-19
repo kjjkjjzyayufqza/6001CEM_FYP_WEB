@@ -53,12 +53,12 @@ export default function Home () {
         <Col span={24}>
           <UploadImageBox
             onUploadDone={(message: string) => {
-              botMessage = {
-                ...botMessage,
-                status: 'sent',
-                text: <p className='text-lg'>{message}</p>
-              }
-              setDataSource(e => [...e, botMessage])
+              // botMessage = {
+              //   ...botMessage,
+              //   status: 'sent',
+              //   text: <p className='text-lg'>{message}</p>
+              // }
+              // setDataSource(e => [...e, botMessage])
             }}
           />
         </Col>
@@ -183,7 +183,7 @@ export default function Home () {
                 referance={null}
               />
             </div>
-            <div className='h-12 bg-slate-200 rounded-full p-1 w-11/12 mx-auto shadow-md mb-2'>
+            <div className='h-12 bg-slate-100 rounded-full p-1 w-11/12 mx-auto shadow-md mb-2'>
               <Form
                 className={'px-8 h-full'}
                 form={form}
@@ -206,6 +206,7 @@ export default function Home () {
                       placeholder='input message'
                       size='large'
                       suffix={suffix}
+                      // className={'rounded-lg'}
                     />
                   </Form.Item>
                   <Form.Item className='ml-2'>

@@ -9,7 +9,7 @@ export function postBotMessage(Message: string) {
   return axios.post(BaseURL + "Chat", data);
 }
 
-export function postImage(ImageByte: FormData) {
+export function postImage(ImageByte: FormData){
   const config = {
     headers: { "content-type": "multipart/form-data", },
   };
