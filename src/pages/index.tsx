@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
@@ -27,6 +28,7 @@ import { MessageBox } from '@/components/MessageBox'
 import moment from 'moment'
 import { Typography, message } from 'antd'
 import { BsFillSendFill } from 'react-icons/bs'
+import Dictaphone from '@/components/test'
 
 const { Text, Link } = Typography
 const { Search } = Input
@@ -183,6 +185,7 @@ export default function Home () {
       className='mx-auto flex justify-center p-6 h-screen '
       style={{ backgroundColor: '#E3F3FE' }}
     >
+      <Dictaphone />
       <div className=' bg-slate-50 rounded-xl shadow-md md:max-w-4xl w-full'>
         <div className='md:flex h-full '>
           <div className='md:flex-shrink-0'>
@@ -236,11 +239,14 @@ export default function Home () {
                       </div>
                     </Button>
                   </Form.Item>
+                  
                 </div>
               </Form>
+              
             </div>
           </div>
         </div>
+        
       </div>
     </div>
   )
