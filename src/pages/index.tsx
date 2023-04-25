@@ -10,6 +10,7 @@ import {
   Card,
   Col,
   Form,
+  Popover,
   Row,
   Spin,
   Upload,
@@ -73,15 +74,6 @@ export default function Home () {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
-
-  const suffix = (
-    <AudioOutlined
-      style={{
-        fontSize: 16,
-        color: '#1890ff'
-      }}
-    />
-  )
 
   const [form] = Form.useForm()
   let messageId: number = 0
@@ -185,7 +177,7 @@ export default function Home () {
       className='mx-auto flex justify-center p-6 h-screen '
       style={{ backgroundColor: '#E3F3FE' }}
     >
-      <Dictaphone />
+      {/* <Dictaphone /> */}
       <div className=' bg-slate-50 rounded-xl shadow-md md:max-w-4xl w-full'>
         <div className='md:flex h-full '>
           <div className='md:flex-shrink-0'>
@@ -224,7 +216,21 @@ export default function Home () {
                     <Input
                       placeholder='input message'
                       size='large'
-                      suffix={suffix}
+                      suffix={
+                        <div className=''>
+                          <Popover content={<></>} title='Title' trigger="click">
+                            <AudioOutlined
+                              style={{
+                                fontSize: 16,
+                                color: '#1890ff'
+                              }}
+                              onClick={() => {
+                                
+                              }}
+                            />
+                          </Popover>
+                        </div>
+                      }
                       // className={'rounded-lg'}
                     />
                   </Form.Item>
@@ -239,14 +245,11 @@ export default function Home () {
                       </div>
                     </Button>
                   </Form.Item>
-                  
                 </div>
               </Form>
-              
             </div>
           </div>
         </div>
-        
       </div>
     </div>
   )
