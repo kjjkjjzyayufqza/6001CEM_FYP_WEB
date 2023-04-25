@@ -1,17 +1,26 @@
-import axios from "axios";
+import { BotMessageResponseModel } from "@/MODEL";
+import axios, { AxiosResponse } from "axios";
 
-const BaseURL = "https://fyp-chatbot-python.azurewebsites.net/";
+let BaseURL = "https://fyp-chatbot-python.azurewebsites.net/";
 
-export function postBotMessage(Message: string) {
+const Mode = process.env.NODE_ENV;
+
+if (Mode == "development") {
+  BaseURL = "http://127.0.0.1:8000/";
+}
+
+export function postBotMessage(
+  Message: string
+): Promise<AxiosResponse<BotMessageResponseModel>> {
   let data = {
-    MessageStr: Message || "hi",
+    MessageStr: Message || "head hurt",
   };
   return axios.post(BaseURL + "Chat", data);
 }
 
-export function postImage(ImageByte: FormData){
+export function postImage(ImageByte: FormData) {
   const config = {
-    headers: { "content-type": "multipart/form-data", },
+    headers: { "content-type": "multipart/form-data" },
   };
   return axios.post(BaseURL + "files", ImageByte, config);
 }

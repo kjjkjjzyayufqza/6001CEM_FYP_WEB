@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Avatar,
   Button,
@@ -14,21 +14,21 @@ import {
   Upload,
   UploadFile
 } from 'antd'
-import {
-  ChatItem,
-  MessageBox,
-  MessageList,
-  MessageType
-} from 'react-chat-elements'
+import { ChatItem, MessageList, MessageType } from 'react-chat-elements'
 import 'react-chat-elements/dist/main.css'
 import { Input, Space } from 'antd'
 import { AudioOutlined, PlusOutlined } from '@ant-design/icons'
 import { postBotMessage, postImage } from '@/API/API'
 import { UploadImageBox } from '@/components/UploadImageBox'
-import { MessageModel, MessageModelType } from '@/MODEL/MessageModel'
 import { FeedBackBox } from '@/components/FeedBackBox'
 import { ThreeDots } from 'react-loader-spinner'
+import { MessageModel, MessageModelType } from '@/components/MessageModel'
+import { MessageBox } from '@/components/MessageBox'
+import moment from 'moment'
+import { Typography, message } from 'antd'
+import { BsFillSendFill } from 'react-icons/bs'
 
+const { Text, Link } = Typography
 const { Search } = Input
 const inter = Inter({ subsets: ['latin'] })
 
@@ -45,9 +45,9 @@ export default function Home () {
       <Row>
         <Col span={24}>
           <>
-            <p className='text-lg'>
+            <Text strong className='text-lg'>
               You can upload relevant skin images to predict diseases.
-            </p>
+            </Text>
           </>
         </Col>
         <Col span={24}>
@@ -67,6 +67,10 @@ export default function Home () {
   })
 
   const [dataSource, setDataSource] = useState<MessageType[]>([])
+  const messagesEndRef = useRef<any>(null)
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
 
   const suffix = (
     <AudioOutlined
@@ -81,7 +85,12 @@ export default function Home () {
   let messageId: number = 0
   const onFinish = (values?: any) => {
     messageId++
-    userMessage = { ...userMessage, id: messageId, text: values.userMessage }
+    userMessage = {
+      ...userMessage,
+      id: messageId,
+      date: moment().format(),
+      text: <Text className='text-lg'>{values.userMessage}</Text>
+    }
     setDataSource(e => [...e, userMessage])
     form.resetFields()
 
@@ -106,14 +115,15 @@ export default function Home () {
       setDataSource(e => [...e, botMessage])
       postBotMessage(values.userMessage)
         .then(res => {
-          if (res.data.botMessage.includes('skin issue')) {
+          const isSkin = res.data.botMessage?.message || ''
+          if (isSkin.includes('skin issue')) {
             setDataSource(e => [
               ...e.map(e => {
                 if (e.status == 'waiting') {
                   e.status = 'sent'
                   e.text = (
                     <>
-                      <p className='text-lg'>{res.data.botMessage}</p>
+                      <MessageBox botMessage={res.data.botMessage} />
                       <FeedBackBox></FeedBackBox>
                     </>
                   ) as any
@@ -127,9 +137,10 @@ export default function Home () {
               ...e.map(e => {
                 if (e.status == 'waiting') {
                   e.status = 'sent'
+                  e.date = moment().format() as any
                   e.text = (
                     <>
-                      <p className='text-lg'>{res.data.botMessage}</p>
+                      <MessageBox botMessage={res.data.botMessage} />
                       <FeedBackBox></FeedBackBox>
                     </>
                   ) as any
@@ -163,6 +174,10 @@ export default function Home () {
     return () => {}
   }, [])
 
+  useEffect(() => {
+    scrollToBottom()
+  }, [dataSource])
+
   return (
     <div
       className='mx-auto flex justify-center p-6 h-screen '
@@ -182,6 +197,7 @@ export default function Home () {
                 dataSource={dataSource}
                 referance={null}
               />
+              <div ref={messagesEndRef} className='h-12' />
             </div>
             <div className='h-12 bg-slate-100 rounded-full p-1 w-11/12 mx-auto shadow-md mb-2'>
               <Form
@@ -211,7 +227,13 @@ export default function Home () {
                   </Form.Item>
                   <Form.Item className='ml-2'>
                     <Button type='primary' htmlType='submit' className='h-10'>
-                      Send
+                      <div className='flex justify-items-center'>
+                        Send
+                        <BsFillSendFill
+                          size={20}
+                          style={{ marginLeft: '0.2em' }}
+                        />
+                      </div>
                     </Button>
                   </Form.Item>
                 </div>

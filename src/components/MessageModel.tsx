@@ -1,9 +1,9 @@
 import { FeedBackBox } from '@/components/FeedBackBox'
-import { Avatar, Col, Row } from 'antd'
+import { Avatar, Col, Row, Typography } from 'antd'
 import moment from 'moment'
 import React, { Children, FC } from 'react'
 import { MessageType } from 'react-chat-elements'
-
+const { Text } = Typography
 export enum MessageModelType {
   UserMessage,
   BotMessage,
@@ -37,11 +37,7 @@ export const MessageModel: FC<{ type: MessageModelType; Children?: any }> = ({
         </Col>
       </Row>
     ) as any,
-    text: (
-      <p className='text-lg'>
-        Hello, what can i help you?
-      </p>
-    ) as any
+    text: (<Text className='text-lg'>Hello, what can i help you?</Text>) as any
   }
 
   let userMessage: MessageType = {
