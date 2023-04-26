@@ -52,6 +52,10 @@ const sortName = (name: string) => {
       return 'Vasculitis Photos'
     case 'Warts Molluscum and other Viral Infections':
       return 'Other Viral Infections'
+    case 'Normal':
+      return 'Normal'
+    default:
+      return 'Not Found'
   }
 }
 

@@ -1,8 +1,9 @@
 import { BotMessageResponseModel } from '@/MODEL'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
-import { Button, Divider, Space, Typography, message } from 'antd'
+import { Button, Divider, Image, Modal, Space, Typography, message } from 'antd'
 import { BsFillQuestionCircleFill } from 'react-icons/bs'
 import { QuestionCircleOutlined } from '@ant-design/icons'
+import { FeedBackBox } from './FeedBackBox'
 const { Text, Link } = Typography
 
 export const MessageBox: FC<BotMessageResponseModel> = ({
@@ -24,9 +25,27 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
   ]
 
   const randomNumber = Math.floor(Math.random() * listResMessage.length)
-
   const [returnMessage, setReturnMessage] = useState<any>('')
   const [suggestionsEle, setSuggestionsEle] = useState<ReactNode>()
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+  const [isShowFeedBack, setIsShowFeedBack] = useState<boolean>(false)
+  const [modelData, setModelData] = useState<{
+    title: string
+    description: string
+  }>()
+
+  const showModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const handleOk = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleCancel = () => {
+    setIsModalOpen(false)
+  }
 
   useEffect(() => {
     if (!botMessage?.tag) {
@@ -35,6 +54,7 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
       if (ignore_tag.includes(botMessage?.tag)) {
         botMessage?.message && setReturnMessage(botMessage?.message)
       } else {
+        setIsShowFeedBack(true)
         botMessage?.message &&
           setReturnMessage(
             <>
@@ -48,12 +68,21 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
     }
 
     if (botMessage?.suggestions?.length) {
+      setModelData({
+        title: botMessage.tag ?? '',
+        description: botMessage.description ?? ''
+      })
       setSuggestionsEle(
         <div>
           <Divider />
           <div className='flex justify-between'>
             <Text className='text-lg'>{botMessage?.suggestionsText}</Text>
-            <Button type={'primary'} icon={<QuestionCircleOutlined />} shape="round">
+            <Button
+              type={'primary'}
+              icon={<QuestionCircleOutlined />}
+              shape='round'
+              onClick={showModal}
+            >
               <Text className='text-white'>
                 {botMessage?.tag?.toUpperCase()}
               </Text>
@@ -88,6 +117,23 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
     <div className='max-w-fit'>
       <Text className='text-lg'>{returnMessage}</Text>
       {suggestionsEle}
+      <Modal
+        title={modelData?.title}
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key='back' onClick={handleOk} type={'primary'}>
+            OK
+          </Button>
+        ]}
+      >
+        <Image src='des.jpg'></Image>
+        <div className='my-5'>
+          <Text>{modelData?.description}</Text>
+        </div>
+      </Modal>
+      {isShowFeedBack && <FeedBackBox></FeedBackBox>}
     </div>
   )
 }

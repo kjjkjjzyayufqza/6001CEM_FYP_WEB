@@ -3,6 +3,7 @@ import { Avatar, Col, Row, Typography } from 'antd'
 import moment from 'moment'
 import React, { Children, FC } from 'react'
 import { MessageType } from 'react-chat-elements'
+import { UploadImageBox } from './UploadImageBox'
 const { Text } = Typography
 export enum MessageModelType {
   UserMessage,
@@ -80,7 +81,21 @@ export const MessageModel: FC<{ type: MessageModelType; Children?: any }> = ({
         </Col>
       </Row>
     ) as any,
-    text: Children
+    text: (
+      <Row>
+        <Col span={24}>
+          <>
+            <Text strong className='text-lg'>
+              If you want to get more information, you can try to upload
+              relevant pictures for prediction.
+            </Text>
+          </>
+        </Col>
+        <Col span={24}>
+          <UploadImageBox onUploadDone={(message: string) => {}} />
+        </Col>
+      </Row>
+    ) as any
   }
 
   switch (type) {
