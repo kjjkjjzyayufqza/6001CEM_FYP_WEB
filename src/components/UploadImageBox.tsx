@@ -7,7 +7,8 @@ import {
   Row,
   Col,
   Divider,
-  Tooltip
+  Tooltip,
+  message
 } from 'antd'
 import { useState } from 'react'
 import type { RcFile, UploadProps } from 'antd/es/upload'
@@ -65,8 +66,8 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
-  const [message, setMessage] = useState<any>()
-
+  const [returnMessage, setReturnMessage] = useState<any>()
+  const [messageApi, contextHolder] = message.useMessage();
   const colorList = ['#45B39D', '#3498DB', '#95A5A6', '#A569BD', '#EC7063']
 
   const uploadImage = async (options: any) => {
@@ -89,16 +90,20 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
       )
     }
 
-    setMessage(listEle)
+    setReturnMessage(listEle)
     postImage(fmData)
       .then(res => {
         onSuccess('Ok')
+        messageApi.open({
+          type: 'success',
+          content: 'Image Upload Success',
+        });
         // self_event.onUploadDone(res.data.botMessage)
         if (!res.data.result) {
           let result = (
             <p className='text-orange-700 text-lg'>{res.data.message}</p>
           )
-          setMessage(result)
+          setReturnMessage(result)
         }
         let listValueName: any[] = []
         let listValue: any[] = []
@@ -129,13 +134,17 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
               </Row>
             )
           }
-          setMessage(listEle)
+          setReturnMessage(listEle)
         }
         // setMessage('hi')
       })
       .catch(err => {
         console.log('Eroor: ', err)
         const error = new Error('Some error')
+        messageApi.open({
+          type: 'warning',
+          content: 'Image Upload Fail',
+        });
         onError({ err })
         // self_event.onUploadDone("File upload error!")
       })
@@ -188,7 +197,7 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
       </Modal>
       {progress > 0 ? <Progress percent={progress} /> : null}
       <Divider />
-      <div className={'w-2/3'}>{message}</div>
+      <div className={'w-2/3'}>{returnMessage}</div>
     </div>
   )
 }
