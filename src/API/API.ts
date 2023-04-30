@@ -24,3 +24,7 @@ export function postImage(ImageByte: FormData) {
   };
   return axios.post(BaseURL + "files", ImageByte, config);
 }
+
+export function getServerStatus(): Promise<AxiosResponse<any>> {
+  return axios.get(BaseURL);
+}

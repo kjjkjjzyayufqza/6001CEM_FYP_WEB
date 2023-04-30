@@ -4,7 +4,7 @@ const nextConfig = {
     loader: "imgix",
     path: "/",
   },
-  reactStrictMode: true,
+  reactStrictMode: false,
 }
 
 module.exports = nextConfig

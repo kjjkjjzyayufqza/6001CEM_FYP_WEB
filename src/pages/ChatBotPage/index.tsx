@@ -14,10 +14,18 @@ import { MessageBox } from '@/components/MessageBox'
 import moment from 'moment'
 import { Typography } from 'antd'
 import { BsFillSendFill } from 'react-icons/bs'
-
 import SpeechRecognitionButton from '@/components/SpeechRecognitionButton'
+import * as Scroll from 'react-scroll'
+import {
+  Element,
+  Events,
+  Link,
+  animateScroll as scroll,
+  scrollSpy,
+  scroller
+} from 'react-scroll'
 
-const { Text, Link } = Typography
+const { Text } = Typography
 const { Search } = Input
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,14 +41,15 @@ export default function ChatBotPage () {
   })
 
   const [dataSource, setDataSource] = useState<MessageType[]>([])
-  const messagesEndRef = useRef<any>(null)
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const [onUpdateUserInputToScroll, setOnUpdateUserInputToScroll] = useState<
+    any[]
+  >([])
+  const buttonRef = useRef<any>(null)
 
   const [form] = Form.useForm()
   let messageId: number = 0
   const onFinish = (values?: any) => {
+    setOnUpdateUserInputToScroll(e => [...e, 0])
     messageId++
     userMessage = {
       ...userMessage,
@@ -130,8 +139,10 @@ export default function ChatBotPage () {
   }, [])
 
   useEffect(() => {
-    scrollToBottom()
-  }, [dataSource])
+    if (buttonRef && buttonRef.current) {
+      buttonRef.current.click()
+    }
+  }, [onUpdateUserInputToScroll])
 
   return (
     <div
@@ -145,7 +156,22 @@ export default function ChatBotPage () {
             <div className='h-48 w-full object-cover md:h-full md:w-48 bg-sky-400 rounded-l-lg' />
           </div>
           <div className='h-full flex flex-col justify-between w-full'>
-            <div className='max-h-[90%] overflow-auto p-4'>
+            <Link
+              activeClass='active'
+              to='EmptyBottomElementScroll'
+              spy={true}
+              smooth={true}
+              duration={250}
+              containerId='containerElement'
+              style={{ display: 'none', margin: '20px' }}
+            >
+              <Button ref={buttonRef}></Button>
+            </Link>
+            <Element
+              name='empty'
+              id='containerElement'
+              className='max-h-[90%] overflow-scroll p-4'
+            >
               <MessageList
                 className='message-list '
                 lockable={true}
@@ -153,8 +179,11 @@ export default function ChatBotPage () {
                 dataSource={dataSource}
                 referance={null}
               />
-              <div ref={messagesEndRef} className='h-12' />
-            </div>
+              <Element
+                name='EmptyBottomElementScroll'
+                className='md:mb-10'
+              ></Element>
+            </Element>
             <div className='h-12 bg-slate-100 rounded-full p-1 w-11/12 mx-auto shadow-md mb-2'>
               <Form
                 className={'px-8 h-full'}
