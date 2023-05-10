@@ -34,7 +34,7 @@ interface ChatBotPageModel {
   tourRef?: any
 }
 
-export const ChatBotPage: FC<ChatBotPageModel> = ({ tourRef }) => {
+export default function ChatBotPage ({ tourRef }: ChatBotPageModel) {
   let botMessage: any = MessageModel({
     type: MessageModelType.BotMessage
   })

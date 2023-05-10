@@ -7,7 +7,7 @@ import {
   TourProps,
   Typography
 } from 'antd'
-import { ChatBotPage } from './ChatBotPage'
+import ChatBotPage from './ChatBotPage'
 import { MessageBox } from 'react-chat-elements'
 import 'react-chat-elements/dist/main.css'
 import { ExampleMessageBox } from '@/components/ExampleMessageBox'
@@ -89,14 +89,14 @@ export default function Home () {
   const ref2 = useRef(null)
   const ref3 = useRef(null)
 
-  const [open, setOpen] = useState<boolean>(false)
+  const [touropen, setTourOpen] = useState<boolean>(false)
 
   const steps: TourProps['steps'] = [
     {
       title: 'Enter text',
       description: 'Please describe what part of your body feels uncomfortable',
       target: () => ref1.current
-    },
+    }
     // {
     //   title: 'Save',
     //   description: 'Save your changes.',
@@ -143,9 +143,6 @@ export default function Home () {
             Health Chat
           </Text>
         </div>
-        <Button type='primary' onClick={() => setOpen(true)}>
-          Begin Tour
-        </Button>
         <div className='flex'>
           <Space>
             <Button
@@ -226,7 +223,7 @@ export default function Home () {
                   <Button
                     style={{ backgroundColor: '#FF6A00', height: '4em' }}
                     onClick={() => {
-                      console.log('hi')
+                      setTourOpen(true)
                     }}
                     type={'ghost'}
                   >
@@ -345,7 +342,7 @@ export default function Home () {
         />
         <div>{/* <Text className='text-xl text-black'>abc</Text> */}</div>
       </div>
-      <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
+      <Tour open={touropen} onClose={() => setTourOpen(false)} steps={steps} />
     </div>
   )
 }
