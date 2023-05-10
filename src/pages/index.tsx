@@ -1,5 +1,13 @@
-import { Button, Space, Statistic, Typography } from 'antd'
-import ChatBotPage from './ChatBotPage'
+import {
+  Button,
+  Collapse,
+  Space,
+  Statistic,
+  Tour,
+  TourProps,
+  Typography
+} from 'antd'
+import { ChatBotPage } from './ChatBotPage'
 import { MessageBox } from 'react-chat-elements'
 import 'react-chat-elements/dist/main.css'
 import { ExampleMessageBox } from '@/components/ExampleMessageBox'
@@ -20,12 +28,86 @@ import {
   scroller
 } from 'react-scroll'
 const { Title, Paragraph, Text } = Typography
+const { Panel } = Collapse
 export default function Home () {
   const [serverPrefix, setServerPrefix] = useState<{
     Status: any
     Icon: ReactNode | null
     Color: string
   }>({ Status: 'Checking', Icon: <SyncOutlined spin />, Color: '#AAAAAA' })
+
+  const diseaseList = [
+    'infected wound',
+    'stomach ache',
+    'acne',
+    'joint pain',
+    'blurry vision',
+    'feeling dizzy',
+    'foot ache',
+    'head ache',
+    'ear ache',
+    'hair falling out',
+    'emotional pain',
+    'knee pain',
+    'skin issue',
+    'muscle pain',
+    'feeling cold',
+    'back pain',
+    'chest pain',
+    'shoulder pain',
+    'hard to breath',
+    'cough',
+    'injury from sports',
+    'neck pain',
+    'internal pain',
+    'open wound',
+    'body feels weak'
+  ].map((e, i) => {
+    return <li key={i}>{e}</li>
+  })
+
+  const skinDiseaseList = [
+    'Acne and Rosacea Photos',
+    'Bullous Disease Photos',
+    'Cellulitis Impetigo and other Bacterial Infections',
+    'Eczema Photos',
+    'Melanoma Skin Cancer Nevi and Moles',
+    'Normal',
+    'Poison Ivy Photos and other Contact Dermatitis',
+    'Scabies Lyme Disease and other Infestations and Bites',
+    'Seborrheic Keratoses and other Benign Tumors',
+    'Systemic Disease',
+    'Tinea Ringworm Candidiasis and other Fungal Infections',
+    'Urticaria Hives',
+    'Vasculitis Photos',
+    'Warts Molluscum and other Viral Infections'
+  ].map((e, i) => {
+    return <li key={i}>{e}</li>
+  })
+
+  const ref1 = useRef(null)
+  const ref2 = useRef(null)
+  const ref3 = useRef(null)
+
+  const [open, setOpen] = useState<boolean>(false)
+
+  const steps: TourProps['steps'] = [
+    {
+      title: 'Enter text',
+      description: 'Please describe what part of your body feels uncomfortable',
+      target: () => ref1.current
+    },
+    // {
+    //   title: 'Save',
+    //   description: 'Save your changes.',
+    //   target: () => ref2.current
+    // },
+    // {
+    //   title: 'Other Actions',
+    //   description: 'Click to see other actions.',
+    //   target: () => ref3.current
+    // }
+  ]
 
   useEffect(() => {
     getServerStatus()
@@ -56,14 +138,14 @@ export default function Home () {
         style={{ backgroundColor: '#2C3134' }}
       >
         <div className='flex'>
-          <img
-            src='https://vitejs.dev/logo-with-shadow.png'
-            className='h-8 mr-3'
-          />
+          <img src='logo-no-background.png' className='h-8 mr-3' />
           <Text className='self-center text-2xl font-semibold whitespace-nowrap text-white'>
             Health Chat
           </Text>
         </div>
+        <Button type='primary' onClick={() => setOpen(true)}>
+          Begin Tour
+        </Button>
         <div className='flex'>
           <Space>
             <Button
@@ -189,17 +271,27 @@ export default function Home () {
               </div>
               <div className='ring-1 ring-slate-900/5'>
                 <Paragraph>
-                  <ul>
-                    <li>
-                      <Text>Principles</Text>
-                    </li>
-                    <li>
-                      <Text>Principles</Text>
-                    </li>
-                    <li>
-                      <Text>Principles</Text>
-                    </li>
+                  <ul style={{ marginLeft: '1em' }}>
+                    {diseaseList.map((e, i) => {
+                      if (i < 8) {
+                        return e
+                      }
+                    })}
                   </ul>
+                  <Collapse ghost>
+                    <Panel
+                      header={<Text style={{ color: '#0089FF' }}>Expand</Text>}
+                      key='1'
+                    >
+                      <ul>
+                        {diseaseList.map((e, i) => {
+                          if (i > 8) {
+                            return e
+                          }
+                        })}
+                      </ul>
+                    </Panel>
+                  </Collapse>
                 </Paragraph>
               </div>
               <div>
@@ -207,28 +299,41 @@ export default function Home () {
                   For skin disease prediction, there are the following
                 </Paragraph>
                 <Paragraph className='ring-1 ring-slate-900/5'>
-                  <ul>
-                    <li>
-                      <Text>Principles</Text>
-                    </li>
-                    <li>
-                      <Text>Principles</Text>
-                    </li>
-                    <li>
-                      <Text>Principles</Text>
-                    </li>
+                  <ul style={{ marginLeft: '1em' }}>
+                    {skinDiseaseList.map((e, i) => {
+                      if (i < 8) {
+                        return e
+                      }
+                    })}
                   </ul>
+                  <Collapse ghost>
+                    <Panel
+                      header={<Text style={{ color: '#0089FF' }}>Expand</Text>}
+                      key='1'
+                    >
+                      <ul>
+                        {skinDiseaseList.map((e, i) => {
+                          if (i > 8) {
+                            return e
+                          }
+                        })}
+                      </ul>
+                    </Panel>
+                  </Collapse>
                 </Paragraph>
               </div>
             </div>
             <div className='relative md:w-20'></div>
-            <div className='md:mx-auto bg-gray-50 dark:bg-slate-800 rounded-lg p-4 ring-1 ring-slate-900/5 shadow-xl'>
+            <div
+              className='md:mx-auto bg-gray-50 dark:bg-slate-800 rounded-lg p-4 ring-1 ring-slate-900/5 shadow-xl'
+              style={{ height: '500px' }}
+            >
               <ExampleMessageBox />
             </div>
           </div>
         </div>
       </div>
-      <ChatBotPage />
+      <ChatBotPage tourRef={ref1} />
       <div className='bg-white relative md:flex justify-center  py-6 sm:py-12'>
         <Statistic
           title='Server Status'
@@ -240,6 +345,7 @@ export default function Home () {
         />
         <div>{/* <Text className='text-xl text-black'>abc</Text> */}</div>
       </div>
+      <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
     </div>
   )
 }

@@ -154,7 +154,7 @@ const SpeechRecognitionButton: FC<SpeechRecognitionButtonModel> = ({
             </Button>
           </Space>
         }
-        title='Title'
+        title='Voice'
         trigger='click'
       >
         <div>
@@ -193,6 +193,7 @@ const SpeechRecognitionButton: FC<SpeechRecognitionButtonModel> = ({
       <button onClick={() => resetTranscript()}>Reset</button>
       <p>{transcript}</p>
       <p>Top</p> */}
+      {contextHolder}
     </div>
   )
 }

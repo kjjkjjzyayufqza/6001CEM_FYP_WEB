@@ -38,7 +38,11 @@ export const MessageModel: FC<{ type: MessageModelType; Children?: any }> = ({
         </Col>
       </Row>
     ) as any,
-    text: (<Text className='text-lg'>Hello, what can i help you?</Text>) as any
+    text: (<Text className='text-lg'>Hello, what can i help you?</Text>) as any,
+    letterItem: {
+      id: 'a',
+      letter: <Text>hi</Text>
+    }
   }
 
   let userMessage: MessageType = {
@@ -82,19 +86,13 @@ export const MessageModel: FC<{ type: MessageModelType; Children?: any }> = ({
       </Row>
     ) as any,
     text: (
-      <Row>
-        <Col span={24}>
-          <>
-            <Text strong className='text-lg'>
-              If you want to get more information, you can try to upload
-              relevant pictures for prediction.
-            </Text>
-          </>
-        </Col>
-        <Col span={24}>
-          <UploadImageBox onUploadDone={(message: string) => {}} />
-        </Col>
-      </Row>
+      <div>
+        <Text strong className='text-lg'>
+          If you want to get more information, you can try to upload relevant
+          pictures for prediction.
+        </Text>
+        <UploadImageBox onUploadDone={(message: string) => {}} />
+      </div>
     ) as any
   }
 

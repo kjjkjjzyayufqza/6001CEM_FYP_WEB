@@ -28,3 +28,7 @@ export function postImage(ImageByte: FormData) {
 export function getServerStatus(): Promise<AxiosResponse<any>> {
   return axios.get(BaseURL);
 }
+
+export function getAllClass(): Promise<AxiosResponse<any>> {
+  return axios.get(BaseURL + 'getAllChatClass');
+}

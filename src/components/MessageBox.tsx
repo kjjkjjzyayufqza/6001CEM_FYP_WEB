@@ -2,14 +2,13 @@ import { BotMessageResponseModel } from '@/MODEL'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import { Button, Divider, Image, Modal, Space, Typography, message } from 'antd'
 import { BsFillQuestionCircleFill } from 'react-icons/bs'
-import { QuestionCircleOutlined } from '@ant-design/icons'
+import { QuestionCircleOutlined, StarFilled } from '@ant-design/icons'
 import { FeedBackBox } from './FeedBackBox'
 const { Text, Link } = Typography
 
-export const MessageBox: FC<BotMessageResponseModel> = ({
-  botMessage,
-  result = true
-}) => {
+interface MessageBoxModel extends BotMessageResponseModel {}
+
+export const MessageBox: FC<MessageBoxModel> = ({ botMessage }, {}) => {
   const listResMessage = [
     'According to your question, I deduce that it may be ',
     'I think it might be '
@@ -29,11 +28,12 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
   const [suggestionsEle, setSuggestionsEle] = useState<ReactNode>()
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
-  const [isShowFeedBack, setIsShowFeedBack] = useState<boolean>(false)
+  const [isShowFeedBack, setIsShowFeedBack] = useState<boolean>(true)
   const [modelData, setModelData] = useState<{
     title: string
     description: string
   }>()
+  const [isMoreSuggestOpen, setIsMoreSuggestOpen] = useState<boolean>(true)
 
   const showModal = () => {
     setIsModalOpen(true)
@@ -55,10 +55,20 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
         botMessage?.message && setReturnMessage(botMessage?.message)
       } else {
         setIsShowFeedBack(true)
+
+        let frontMessage = listResMessage[randomNumber]
+        if (botMessage.message?.startsWith("I don't quite understand")) {
+          const spli: string[] = botMessage.message.split('could be ')
+          botMessage.message =
+            botMessage.message.split('could be ')[spli.length - 1]
+          frontMessage =
+            "I don't quite understand what you're describing, but it could be "
+        }
+
         botMessage?.message &&
           setReturnMessage(
             <>
-              {listResMessage[randomNumber]}
+              {frontMessage}
               <Text className='text-lg' underline strong>
                 {botMessage?.message}
               </Text>
@@ -71,6 +81,39 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
       setModelData({
         title: botMessage.tag ?? '',
         description: botMessage.description ?? ''
+      })
+      const maxSuggestionCount = 3
+      let _otherSuggest: any[] = []
+      let suggests = botMessage?.suggestions.map((e, i) => {
+        if (i < maxSuggestionCount) {
+          return (
+            <div
+              key={i}
+              className='bg-white dark:bg-slate-800 rounded-md px-2 py-2 ring-1 ring-gray-200 shadow-sm flex mt-2'
+            >
+              <div>
+                <span className='inline-flex items-center justify-center p-1 bg-emerald-500 rounded-md' />
+              </div>
+              <Text className='text-zinc-900 dark:text-slate-400 text-sm ml-2'>
+                {e}
+              </Text>
+            </div>
+          )
+        } else {
+          _otherSuggest.push(
+            <div
+              key={i}
+              className='bg-white dark:bg-slate-800 rounded-md px-2 py-2 ring-1 ring-gray-200 shadow-sm flex mt-2'
+            >
+              <div>
+                <span className='inline-flex items-center justify-center p-1 bg-emerald-500 rounded-md' />
+              </div>
+              <Text className='text-zinc-900 dark:text-slate-400 text-sm ml-2'>
+                {e}
+              </Text>
+            </div>
+          )
+        }
       })
       setSuggestionsEle(
         <div>
@@ -88,21 +131,36 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
               </Text>
             </Button>
           </div>
-          {botMessage.suggestions.map((e, i) => {
-            return (
-              <div
-                key={i}
-                className='bg-white dark:bg-slate-800 rounded-md px-2 py-2 ring-1 ring-gray-200 shadow-sm flex mt-2'
+          {suggests}
+          {isMoreSuggestOpen && (
+            <div className='mt-2'>
+              <Button
+                style={{ backgroundColor: '#E8EFF5' }}
+                icon={<StarFilled style={{ color: '#2499EA' }} />}
+                shape='round'
+                onClick={() => {
+                  setIsMoreSuggestOpen(e => !e)
+                  PubSub.publish(
+                    'getMoreSuggest',
+                    <div>
+                      <Text className='text-lg'>
+                        Okay, here's more suggest to helping{' '}
+                        <Text className='text-lg' strong underline>
+                          {botMessage?.message}
+                        </Text>
+                        !
+                      </Text>
+                      {_otherSuggest}
+                    </div>
+                  )
+                }}
               >
-                <div>
-                  <span className='inline-flex items-center justify-center p-1 bg-emerald-500 rounded-md' />
-                </div>
-                <Text className='text-zinc-900 dark:text-slate-400 text-sm ml-2'>
-                  {e}
+                <Text className='text-black'>
+                  I want more suggestion helping with {botMessage?.message}
                 </Text>
-              </div>
-            )
-          })}
+              </Button>
+            </div>
+          )}
           <div className='mt-2'>
             <Text code>
               Note: Please consult your doctor before taking any medication.
@@ -111,7 +169,7 @@ export const MessageBox: FC<BotMessageResponseModel> = ({
         </div>
       )
     }
-  }, [])
+  }, [isMoreSuggestOpen])
 
   return (
     <div className='max-w-fit'>

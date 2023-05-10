@@ -8,11 +8,12 @@ import {
   Col,
   Divider,
   Tooltip,
-  message
+  message,
+  Typography
 } from 'antd'
 import { useState } from 'react'
 import type { RcFile, UploadProps } from 'antd/es/upload'
-
+const { Title, Paragraph, Text, Link } = Typography
 export default interface UploadImageBoxModel {
   onUploadDone: (message: string) => void
 }
@@ -67,7 +68,9 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
   const [previewImage, setPreviewImage] = useState('')
   const [previewTitle, setPreviewTitle] = useState('')
   const [returnMessage, setReturnMessage] = useState<any>()
-  const [messageApi, contextHolder] = message.useMessage();
+  const [firstDisName, setFirstDisName] = useState<string>('')
+
+  const [messageApi, contextHolder] = message.useMessage()
   const colorList = ['#45B39D', '#3498DB', '#95A5A6', '#A569BD', '#EC7063']
 
   const uploadImage = async (options: any) => {
@@ -96,8 +99,8 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
         onSuccess('Ok')
         messageApi.open({
           type: 'success',
-          content: 'Image Upload Success',
-        });
+          content: 'Image Upload Success'
+        })
         // self_event.onUploadDone(res.data.botMessage)
         if (!res.data.result) {
           let result = (
@@ -135,6 +138,7 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
             )
           }
           setReturnMessage(listEle)
+          setFirstDisName(res.data?.top5Prediction[0][0])
         }
         // setMessage('hi')
       })
@@ -143,8 +147,8 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
         const error = new Error('Some error')
         messageApi.open({
           type: 'warning',
-          content: 'Image Upload Fail',
-        });
+          content: 'Image Upload Fail'
+        })
         onError({ err })
         // self_event.onUploadDone("File upload error!")
       })
@@ -185,7 +189,7 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
         // showUploadList={{ showRemoveIcon: false }}
         style={{ width: '1000px', height: '1000px' }}
       >
-        {defaultFileList.length >= 1 ? null : <div>Upload Button</div>}
+        {defaultFileList.length >= 1 ? null : <div>Upload Here</div>}
       </Upload>
       <Modal
         open={previewOpen}
@@ -198,6 +202,26 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
       {progress > 0 ? <Progress percent={progress} /> : null}
       <Divider />
       <div className={'w-2/3'}>{returnMessage}</div>
+      {returnMessage && (
+        <>
+          <Divider className='my-0' />
+          <div className='mt-3'>
+            <div>
+              <Text className='text-md'>
+                According to the results, the probability of{' '}
+                <Text strong underline className='text-md'>
+                  {sortName(firstDisName)}
+                </Text>{' '}
+                is the highest and we recommend that you see a dermatologist for
+                further treatment.
+              </Text>
+            </div>
+            <div>
+              <Text code>Forecast data is for reference only</Text>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }
