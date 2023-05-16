@@ -1,6 +1,7 @@
 import {
   Button,
   Collapse,
+  Radio,
   Space,
   Statistic,
   Tour,
@@ -29,13 +30,15 @@ import {
 } from 'react-scroll'
 const { Title, Paragraph, Text } = Typography
 const { Panel } = Collapse
+import '../i18n/i18n'
+import { useTranslation } from 'react-i18next'
 export default function Home () {
   const [serverPrefix, setServerPrefix] = useState<{
     Status: any
     Icon: ReactNode | null
     Color: string
   }>({ Status: 'Checking', Icon: <SyncOutlined spin />, Color: '#AAAAAA' })
-
+  const { t, i18n } = useTranslation()
   const diseaseList = [
     'infected wound',
     'stomach ache',
@@ -127,6 +130,13 @@ export default function Home () {
       })
   }, [])
 
+  const options = [
+    { label: 'EN', value: 'us' },
+    { label: '繁', value: 'zh_hk' }
+  ]
+
+  const [i18nValue, setI18nValue] = useState('us')
+
   const scrollTo = (value = 100) => {
     scroll.scrollMore(value)
   }
@@ -140,44 +150,48 @@ export default function Home () {
         <div className='flex'>
           <img src='logo-no-background.png' className='h-8 mr-3' />
           <Text className='self-center text-2xl font-semibold whitespace-nowrap text-white'>
-            Health Chat
+            {t('Health Chat')}
           </Text>
         </div>
         <div className='flex'>
           <Space>
-            <Button
-              type={'ghost'}
-              onClick={() => {
-                scrollTo(100)
-              }}
-            >
-              <Text className='text-lg text-white' strong>
-                {'Introduction'.toUpperCase()}
-              </Text>
-            </Button>
-            <Button
-              type={'ghost'}
-              onClick={() => {
-                scrollTo(1220)
-              }}
-            >
-              <Text className='text-lg text-white' strong>
-                {'Chat'.toUpperCase()}
-              </Text>
-            </Button>
-            <Button
-              type={'ghost'}
-              onClick={() => {
-                scrollTo(1500)
-              }}
-            >
-              <Text className='text-lg text-white' strong>
-                {'Other'.toUpperCase()}
-              </Text>
-            </Button>
+            <Link activeClass='active' to='test1' spy={true} smooth={true}>
+              <Button type={'ghost'} onClick={() => {}}>
+                <Text className='text-lg text-white' strong>
+                  {'Introduction'.toUpperCase()}
+                </Text>
+              </Button>
+            </Link>
+            <Link activeClass='active' to='test2' spy={true} smooth={true}>
+              <Button type={'ghost'} onClick={() => {}}>
+                <Text className='text-lg text-white' strong>
+                  {'Chat'.toUpperCase()}
+                </Text>
+              </Button>
+            </Link>
+            <Link activeClass='active' to='test3' spy={true} smooth={true}>
+              <Button type={'ghost'} onClick={() => {}}>
+                <Text className='text-lg text-white' strong>
+                  {'Other'.toUpperCase()}
+                </Text>
+              </Button>
+            </Link>
           </Space>
         </div>
-        <div className='flex md:order-2'>
+        <div className='flex md:order-2 items-center'>
+          <Radio.Group
+            options={options}
+            onChange={e => {
+              setI18nValue(e.target.value)
+              i18n.changeLanguage(e.target.value)
+              localStorage.setItem('i18nValue', e.target.value)
+            }}
+            value={i18nValue}
+            optionType='button'
+            buttonStyle='solid'
+            size={'small'}
+            className='mr-10'
+          />
           <Button
             type={'ghost'}
             style={{ backgroundColor: '#0078FF', height: '3em' }}
@@ -241,6 +255,7 @@ export default function Home () {
           </div>
         </div>
       </div>
+      <Element name='test1'></Element>
       <div className='relative md:flex justify-center  bg-gray-100 py-6 sm:py-12'>
         <div className='max-w-md mx-auto md:max-w-6xl'>
           <div className='md:flex'>
@@ -330,6 +345,7 @@ export default function Home () {
           </div>
         </div>
       </div>
+      <Element name='test2'></Element>
       <ChatBotPage tourRef={ref1} />
       <div className='bg-white relative md:flex justify-center  py-6 sm:py-12'>
         <Statistic
@@ -342,6 +358,7 @@ export default function Home () {
         />
         <div>{/* <Text className='text-xl text-black'>abc</Text> */}</div>
       </div>
+      <Element name='test3'></Element>
       <Tour open={touropen} onClose={() => setTourOpen(false)} steps={steps} />
     </div>
   )

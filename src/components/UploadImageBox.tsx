@@ -75,7 +75,6 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
 
   const uploadImage = async (options: any) => {
     const { onSuccess, onError, file, onProgress } = options
-
     const fmData = new FormData()
     fmData.append('image', file)
 
@@ -202,7 +201,7 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
       {progress > 0 ? <Progress percent={progress} /> : null}
       <Divider />
       <div className={'w-2/3'}>{returnMessage}</div>
-      {returnMessage && (
+      {returnMessage && sortName(firstDisName) != 'Not Found' && (
         <>
           <Divider className='my-0' />
           <div className='mt-3'>
@@ -217,7 +216,7 @@ export const UploadImageBox = (self_event: UploadImageBoxModel) => {
               </Text>
             </div>
             <div>
-              <Text code>Forecast data is for reference only</Text>
+              <Text code>Predictions data is for reference only</Text>
             </div>
           </div>
         </>

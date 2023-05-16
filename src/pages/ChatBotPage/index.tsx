@@ -67,7 +67,7 @@ export default function ChatBotPage ({ tourRef }: ChatBotPageModel) {
     setDataSource(e => [...e, userMessage])
     form.resetFields()
 
-    if (values.userMessage == 'image') {
+    if (values.userMessage == 'I want to upload pictures of my skin to predict diseases.') {
       setDataSource(e => [...e, botFileMessage])
     } else {
       botMessage = {
@@ -218,40 +218,60 @@ export default function ChatBotPage ({ tourRef }: ChatBotPageModel) {
 
             <div className='h-12 bg-slate-100 rounded-full p-1 w-11/12 mx-auto shadow-md mb-2'>
               {isFirstShowQuickSelect && (
-                <div
-                  className='p-1 md:mx-auto md:absolute flex justify-center items-center space-x-2'
-                  style={{
-                    marginTop: '-50px'
-                  }}
-                >
-                  <Button
-                    className='rounded-full'
-                    onClick={() => {
-                      quickSend('My skin is feeling uncomfortable.')
+                <>
+                  <div
+                    className='p-1 md:mx-auto md:absolute grid gap-2 grid-cols-3 overflow-hidden'
+                    style={{
+                      marginTop: '-80px'
                     }}
                   >
-                    <Text>My skin is feeling uncomfortable.</Text>
-                  </Button>
-                  <Button
-                    className='rounded-full'
-                    onClick={() => {
-                      quickSend('I am feeling uncomfortable.')
-                    }}
+                    <Button
+                      className='max-w-md bg-white overflow-hidden md:max-w-2xl rounded-full'
+                      onClick={() => {
+                        quickSend('My skin is particularly red')
+                      }}
+                    >
+                      <Text>My skin is particularly red</Text>
+                    </Button>
+                    <Button
+                      className='max-w-md bg-white overflow-hidden md:max-w-2xl rounded-full'
+                      onClick={() => {
+                        quickSend('I am feeling uncomfortable.')
+                      }}
+                    >
+                      <Text>I am feeling uncomfortable.</Text>
+                    </Button>
+                    <Button
+                      className='max-w-md bg-white overflow-hidden md:max-w-2xl rounded-full'
+                      onClick={() => {
+                        quickSend('My stomach feels painful.')
+                      }}
+                    >
+                      <Text>My stomach feels painful.</Text>
+                    </Button>
+                  </div>
+                  <div
+                    className='p-1 md:mx-auto md:absolute overflow-hidden w-3/6'
+                    style={{ marginTop: '-40px' }}
                   >
-                    <Text>I am feeling uncomfortable.</Text>
-                  </Button>
-                  <Button
-                    className='rounded-full'
-                    onClick={() => {
-                      quickSend('My stomach feels painful.')
-                    }}
-                  >
-                    <Text>My stomach feels painful.</Text>
-                  </Button>
-                </div>
+                    <Button
+                      className='max-w-md bg-white overflow-hidden md:max-w-2xl rounded-full'
+                      onClick={() => {
+                        quickSend(
+                          'I want to upload pictures of my skin to predict diseases.'
+                        )
+                      }}
+                    >
+                      <Text>
+                        I want to upload pictures of my skin to predict
+                        diseases.
+                      </Text>
+                    </Button>
+                  </div>
+                </>
               )}
               <Form
-                className={'px-8 h-full'}
+                className={'px-1 h-full'}
                 form={form}
                 name='basic'
                 initialValues={{ remember: true }}

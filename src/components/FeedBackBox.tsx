@@ -1,4 +1,4 @@
-import { getAllClass } from '@/API/API'
+import { addFeedBack, getAllClass } from '@/API/API'
 import { Button, Input, Modal, Select, Space, message } from 'antd'
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Divider, Typography } from 'antd'
@@ -9,13 +9,10 @@ export const FeedBackBox = () => {
   const [isClick, setIsClick] = useState<boolean>(false)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectValue, setSelectValue] = useState<any[]>()
-  const [selectDis, setSelectDis] = useState<string>('')
-  const [description, setDescription] = useState<string>('')
+  const [selectDis, setSelectDis] = useState<string>()
+  const [description, setDescription] = useState<string>()
   const [isSubmitFB, setIsSubmitFB] = useState<boolean>(false)
-  const [submit, setSubmit] = useState<{
-    Diseases: string
-    Description: string
-  }>()
+
   const [messageApi, contextHolder] = message.useMessage()
 
   const showModal = () => {
@@ -25,10 +22,29 @@ export const FeedBackBox = () => {
   const handleOk = () => {
     setIsModalOpen(false)
     console.log(selectDis, description)
-    messageApi.open({
-      type: 'success',
-      content: 'This is a success message'
-    })
+    if (selectDis && description) {
+      addFeedBack({ category: selectDis, description: description })
+        .then(res => {
+          messageApi.open({
+            type: 'success',
+            content: 'Thank you for you feedback'
+          })
+          messageApi.open({
+            type: 'success',
+            content: 'Disease data uploaded'
+          })
+          setIsClick(true)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    } else {
+      messageApi.open({
+        type: 'success',
+        content: 'Thank you for you feedback'
+      })
+      setIsClick(true)
+    }
   }
 
   const handleCancel = () => {
@@ -162,7 +178,6 @@ export const FeedBackBox = () => {
               className='mt-2'
             />
           </div>
-          {contextHolder}
         </Modal>
       </div>
     )
@@ -173,5 +188,10 @@ export const FeedBackBox = () => {
       </div>
     )
   }
-  return returnEle
+  return (
+    <>
+      {returnEle}
+      {contextHolder}
+    </>
+  )
 }
