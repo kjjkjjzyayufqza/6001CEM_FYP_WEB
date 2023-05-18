@@ -2,7 +2,11 @@ import { BotMessageResponseModel } from '@/MODEL'
 import React, { FC, ReactElement, ReactNode, useEffect, useState } from 'react'
 import { Button, Divider, Image, Modal, Space, Typography, message } from 'antd'
 import { BsFillQuestionCircleFill } from 'react-icons/bs'
-import { QuestionCircleOutlined, StarFilled } from '@ant-design/icons'
+import {
+  QuestionCircleOutlined,
+  StarFilled,
+  SendOutlined
+} from '@ant-design/icons'
 import { FeedBackBox } from './FeedBackBox'
 const { Text, Link } = Typography
 
@@ -132,39 +136,57 @@ export const MessageBox: FC<MessageBoxModel> = ({ botMessage }, {}) => {
             </Button>
           </div>
           {suggests}
-          {isMoreSuggestOpen && (
-            <div className='mt-2'>
-              <Button
-                style={{ backgroundColor: '#E8EFF5' }}
-                icon={<StarFilled style={{ color: '#2499EA' }} />}
-                shape='round'
-                onClick={() => {
-                  setIsMoreSuggestOpen(e => !e)
-                  PubSub.publish(
-                    'getMoreSuggest',
-                    <div>
-                      <Text className='text-lg'>
-                        Okay, here's more suggest to helping{' '}
-                        <Text className='text-lg' strong underline>
-                          {botMessage?.message}
-                        </Text>
-                        !
-                      </Text>
-                      {_otherSuggest}
-                    </div>
-                  )
-                }}
-              >
-                <Text className='text-black'>
-                  I want more suggestion helping with {botMessage?.message}
-                </Text>
-              </Button>
-            </div>
-          )}
           <div className='mt-2'>
             <Text code>
               Note: Please consult your doctor before taking any medication.
             </Text>
+          </div>
+          <div className='bg-white dark:bg-slate-800 rounded-md px-2 py-2 ring-1 ring-gray-200 shadow-sm mt-5'>
+            {isMoreSuggestOpen && (
+              <div className='mt-2'>
+                <Button
+                  style={{ backgroundColor: '#efefef' }}
+                  icon={<StarFilled style={{ color: '#2499EA' }} />}
+                  shape='round'
+                  onClick={() => {
+                    setIsMoreSuggestOpen(e => !e)
+                    PubSub.publish(
+                      'getMoreSuggest',
+                      <div>
+                        <Text className='text-lg'>
+                          Okay, here's more suggest to helping{' '}
+                          <Text className='text-lg' strong underline>
+                            {botMessage?.message}
+                          </Text>
+                          !
+                        </Text>
+                        {_otherSuggest}
+                      </div>
+                    )
+                  }}
+                >
+                  <Text className='text-black'>
+                    Do you want more suggestion helping with{' '}
+                    {botMessage?.message} ?
+                  </Text>
+                </Button>
+              </div>
+            )}
+            <div className='mt-2'>
+              <Button
+                style={{
+                  backgroundColor: '#efefef'
+                }}
+                icon={<SendOutlined style={{ color: '#2499EA' }} />}
+                shape='round'
+                onClick={() => {}}
+              >
+                <Text className='text-black'>
+                  Do you want to get information about the{' '}
+                  {SwitchDoctorCate(botMessage?.message!)} nearest you?
+                </Text>
+              </Button>
+            </div>
           </div>
         </div>
       )
@@ -194,4 +216,117 @@ export const MessageBox: FC<MessageBoxModel> = ({ botMessage }, {}) => {
       {isShowFeedBack && <FeedBackBox></FeedBackBox>}
     </div>
   )
+}
+
+function SwitchDoctorCate (type: string): string {
+  const AllChatClass = [
+    'infected wound',
+    'stomach ache',
+    'acne',
+    'joint pain',
+    'blurry vision',
+    'feeling dizzy',
+    'foot ache',
+    'head ache',
+    'ear ache',
+    'hair falling out',
+    'emotional pain',
+    'knee pain',
+    'skin issue',
+    'muscle pain',
+    'feeling cold',
+    'back pain',
+    'chest pain',
+    'shoulder pain',
+    'hard to breath',
+    'cough',
+    'injury from sports',
+    'neck pain',
+    'internal pain',
+    'open wound',
+    'body feels weak'
+  ]
+
+  switch (type) {
+    case AllChatClass[0]:
+      //外科医生
+      return 'General Surgeon'
+    case AllChatClass[1]:
+      //普通科
+      return 'General Practitioner'
+    case AllChatClass[2]:
+      //皮肤科
+      return 'Dermatologists'
+    case AllChatClass[3]:
+      //骨科医生
+      return 'Orthopedic Surgeon'
+    case AllChatClass[4]:
+      //眼科医生
+      return 'Ophthalmologist'
+    case AllChatClass[5]:
+      //普通科
+      return 'General Practitioner'
+    case AllChatClass[6]:
+      //内科医生
+      return 'Internal Medicine Physician'
+    case AllChatClass[7]:
+      //普通科
+      return 'General Practitioner'
+    case AllChatClass[8]:
+      //耳鼻喉科医生
+      return 'Otolaryngologist'
+    case AllChatClass[9]:
+      //皮肤科
+      return 'Dermatologists'
+    case AllChatClass[10]:
+      //心理医生
+      return 'Psychologist'
+    case AllChatClass[11]:
+      //骨科医生
+      return 'Orthopedic Surgeon'
+    case AllChatClass[12]:
+      //皮肤科
+      return 'Dermatologists'
+    case AllChatClass[13]:
+      //内科医生
+      return 'Internal Medicine Physician'
+    case AllChatClass[14]:
+      //内科医生
+      return 'Internal Medicine Physician'
+    case AllChatClass[15]:
+      //内科医生
+      return 'Internal Medicine Physician'
+    case AllChatClass[16]:
+      //骨科医生
+      return 'Orthopedic Surgeon'
+    case AllChatClass[17]:
+      //内科医生
+      return 'Internal Medicine Physician'
+    case AllChatClass[18]:
+      //内科医生
+      return 'Internal Medicine Physician'
+    case AllChatClass[19]:
+      //普通科
+      return 'General Practitioner'
+    case AllChatClass[20]:
+      //普通科
+      return 'General Practitioner'
+    case AllChatClass[21]:
+      //普通科
+      return 'General Practitioner'
+    case AllChatClass[22]:
+      //普通科
+      return 'General Practitioner'
+    case AllChatClass[23]:
+      //普通科
+      return 'General Practitioner'
+    case AllChatClass[24]:
+      //外科医生
+      return 'General Surgeon'
+    case AllChatClass[25]:
+      //普通科
+      return 'General Practitioner'
+    default:
+      return 'none'
+  }
 }
