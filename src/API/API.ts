@@ -62,10 +62,12 @@ export function getAllClass(): Promise<AxiosResponse<any>> {
 export function addFeedBack({
   category,
   description,
+  date,
 }: any): Promise<AxiosResponse<any>> {
   const data = {
     category,
     description,
+    date,
   };
   return instance.post("addFeedBack", data);
 }

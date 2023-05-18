@@ -2,6 +2,7 @@ import { addFeedBack, getAllClass } from '@/API/API'
 import { Button, Input, Modal, Select, Space, message } from 'antd'
 import React, { ReactElement, useEffect, useState } from 'react'
 import { Divider, Typography } from 'antd'
+import moment from 'moment'
 
 const { Title, Paragraph, Text, Link } = Typography
 const { TextArea } = Input
@@ -23,7 +24,7 @@ export const FeedBackBox = () => {
     setIsModalOpen(false)
     console.log(selectDis, description)
     if (selectDis && description) {
-      addFeedBack({ category: selectDis, description: description })
+      addFeedBack({ category: selectDis, description: description,date: moment().format() })
         .then(res => {
           messageApi.open({
             type: 'success',
