@@ -181,10 +181,13 @@ export const MessageBox: FC<MessageBoxModel> = ({ botMessage }, {}) => {
                 shape='round'
                 onClick={() => {}}
               >
-                <Text className='text-black'>
-                  Do you want to get information about the{' '}
-                  {SwitchDoctorCate(botMessage?.message!)} nearest you?
-                </Text>
+                <Link
+                  className='text-black'
+                  href='https://onedrive.live.com/download?cid=0A1E80E34D0A9499&resid=A1E80E34D0A9499%21178&authkey=ADkgz74cunti7zY'
+                >
+                  Do you want the {SwitchDoctorCate(botMessage?.message!)}{' '}
+                  closest to you?
+                </Link>
               </Button>
             </div>
           </div>

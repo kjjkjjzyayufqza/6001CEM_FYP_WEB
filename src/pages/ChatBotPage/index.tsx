@@ -177,8 +177,7 @@ export default function ChatBotPage ({ tourRef }: ChatBotPageModel) {
 
   return (
     <div
-      className='mx-auto flex justify-center p-6 h-screen '
-      style={{ backgroundColor: '#E3F3FE' }}
+      className='mx-auto flex justify-center p-6 h-screen bg-[#F0F3FC]'
     >
       {/* <Dictaphone /> */}
       <div className=' bg-slate-50 rounded-xl shadow-md md:max-w-4xl w-full'>

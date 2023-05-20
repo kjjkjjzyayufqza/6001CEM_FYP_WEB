@@ -66,7 +66,7 @@ export default function Home () {
     'open wound',
     'body feels weak'
   ].map((e, i) => {
-    return <li key={i}>{e}</li>
+    return <li key={i}>{t(e)}</li>
   })
 
   const skinDiseaseList = [
@@ -85,7 +85,7 @@ export default function Home () {
     'Vasculitis Photos',
     'Warts Molluscum and other Viral Infections'
   ].map((e, i) => {
-    return <li key={i}>{e}</li>
+    return <li key={i}>{t(e)}</li>
   })
 
   const ref1 = useRef(null)
@@ -158,21 +158,21 @@ export default function Home () {
             <Link activeClass='active' to='test1' spy={true} smooth={true}>
               <Button type={'ghost'} onClick={() => {}}>
                 <Text className='text-lg text-white' strong>
-                  {'Introduction'.toUpperCase()}
+                  {t('Introduction'.toUpperCase())}
                 </Text>
               </Button>
             </Link>
             <Link activeClass='active' to='test2' spy={true} smooth={true}>
               <Button type={'ghost'} onClick={() => {}}>
                 <Text className='text-lg text-white' strong>
-                  {'Chat'.toUpperCase()}
+                  {t('Chat'.toUpperCase())}
                 </Text>
               </Button>
             </Link>
             <Link activeClass='active' to='test3' spy={true} smooth={true}>
               <Button type={'ghost'} onClick={() => {}}>
                 <Text className='text-lg text-white' strong>
-                  {'Other'.toUpperCase()}
+                  {t('Other'.toUpperCase())}
                 </Text>
               </Button>
             </Link>
@@ -199,7 +199,12 @@ export default function Home () {
               console.log('hi')
             }}
           >
-            <Text className='text-xl text-white'>Download APP</Text>
+            <a
+              href='https://onedrive.live.com/download?cid=0A1E80E34D0A9499&resid=A1E80E34D0A9499%21178&authkey=ADkgz74cunti7zY'
+              className='text-xl text-white'
+            >
+              <Text className='text-xl text-white'>Download APP</Text>
+            </a>
           </Button>
         </div>
       </div>
@@ -230,7 +235,7 @@ export default function Home () {
                 </div>
                 <div className='pt-5'>
                   <Text className='text-3xl'>
-                    A intelligent medical chatbots
+                    {t('A intelligent medical chatbots')}
                   </Text>
                 </div>
                 <div className='mt-3'>
@@ -241,13 +246,17 @@ export default function Home () {
                     }}
                     type={'ghost'}
                   >
-                    <Text className='text-2xl text-white'>Get Started</Text>
+                    <Text className='text-2xl text-white'>
+                      {t('Get Started')}
+                    </Text>
                   </Button>
                 </div>
                 <div>
                   <Paragraph className='mt-3'>
-                    Provide suggestions and{' '}
-                    <Text code> recommend doctors (Mobile app required)</Text>
+                    {t('Provide suggestions and')}{' '}
+                    <Text code>
+                      {t('recommend doctors (Mobile app required)')}
+                    </Text>
                   </Paragraph>
                 </div>
               </div>
@@ -256,29 +265,32 @@ export default function Home () {
         </div>
       </div>
       <Element name='test1'></Element>
-      <div className='relative md:flex justify-center  bg-gray-100 py-6 sm:py-12'>
+      <div className='relative md:flex justify-center bg-[#F6F7FC] py-6 sm:py-12'>
         <div className='max-w-md mx-auto md:max-w-6xl'>
           <div className='md:flex'>
-            <div className='md:mx-auto bg-gray-50  rounded-lg px-6 py-8 ring-1 ring-slate-900/5 '>
+            <div className='md:mx-auto bg-white  rounded-lg px-6 py-8 ring-1 ring-slate-900/5 '>
               <div>
                 <Paragraph className='text-xl'>
-                  The chatbot automatically determines the{' '}
+                  {t('The chatbot automatically determines the')}{' '}
                   <Text strong className='text-xl'>
-                    diseases
+                    {t('diseases')}
                   </Text>{' '}
-                  the user has based on the user's input and makes corresponding{' '}
+                  {t(
+                    "the user has based on the user's input and makes corresponding"
+                  )}{' '}
                   <Text strong className='text-xl'>
-                    suggestions
+                    {t('suggestions')}
                   </Text>
-                  . Also, if the user asks about a{' '}
+                  . {t('Also, if the user asks about a')}{' '}
                   <Text strong className='text-xl'>
-                    skin problem
+                    {t('skin problem')}
                   </Text>
-                  , the chatbot asks for a photo for further{' '}
+                  {', '}
+                  {t('the chatbot asks for a photo for further')}{' '}
                   <Text strong className='text-xl'>
-                    disease prediction
+                    {t('disease prediction')}
                   </Text>
-                  . The following are currently supported
+                  . {t('The following are currently supported')}
                 </Paragraph>
               </div>
               <div className='ring-1 ring-slate-900/5'>
@@ -292,7 +304,9 @@ export default function Home () {
                   </ul>
                   <Collapse ghost>
                     <Panel
-                      header={<Text style={{ color: '#0089FF' }}>Expand</Text>}
+                      header={
+                        <Text style={{ color: '#0089FF' }}>{t('Expand')}</Text>
+                      }
                       key='1'
                     >
                       <ul>
@@ -308,7 +322,7 @@ export default function Home () {
               </div>
               <div>
                 <Paragraph className='text-xl'>
-                  For skin disease prediction, there are the following
+                  {t('For skin disease prediction, there are the following')}
                 </Paragraph>
                 <Paragraph className='ring-1 ring-slate-900/5'>
                   <ul style={{ marginLeft: '1em' }}>
@@ -320,7 +334,9 @@ export default function Home () {
                   </ul>
                   <Collapse ghost>
                     <Panel
-                      header={<Text style={{ color: '#0089FF' }}>Expand</Text>}
+                      header={
+                        <Text style={{ color: '#0089FF' }}>{t('Expand')}</Text>
+                      }
                       key='1'
                     >
                       <ul>
