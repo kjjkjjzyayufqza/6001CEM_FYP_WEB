@@ -297,7 +297,7 @@ export default function Home () {
                 <Paragraph>
                   <ul style={{ marginLeft: '1em' }}>
                     {diseaseList.map((e, i) => {
-                      if (i < 8) {
+                      if (i <= 8) {
                         return e
                       }
                     })}
@@ -327,7 +327,7 @@ export default function Home () {
                 <Paragraph className='ring-1 ring-slate-900/5'>
                   <ul style={{ marginLeft: '1em' }}>
                     {skinDiseaseList.map((e, i) => {
-                      if (i < 8) {
+                      if (i <= 8) {
                         return e
                       }
                     })}
