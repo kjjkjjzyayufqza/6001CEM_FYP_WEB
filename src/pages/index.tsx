@@ -23,12 +23,12 @@ import * as Scroll from 'react-scroll'
 import {
   Element,
   Events,
-  Link,
+  Link as Links,
   animateScroll as scroll,
   scrollSpy,
   scroller
 } from 'react-scroll'
-const { Title, Paragraph, Text } = Typography
+const { Title, Paragraph, Text, Link } = Typography
 const { Panel } = Collapse
 import '../i18n/i18n'
 import { useTranslation } from 'react-i18next'
@@ -155,27 +155,27 @@ export default function Home () {
         </div>
         <div className='flex'>
           <Space>
-            <Link activeClass='active' to='test1' spy={true} smooth={true}>
+            <Links activeClass='active' to='test1' spy={true} smooth={true}>
               <Button type={'ghost'} onClick={() => {}}>
                 <Text className='text-lg text-white' strong>
                   {t('Introduction'.toUpperCase())}
                 </Text>
               </Button>
-            </Link>
-            <Link activeClass='active' to='test2' spy={true} smooth={true}>
+            </Links>
+            <Links activeClass='active' to='test2' spy={true} smooth={true}>
               <Button type={'ghost'} onClick={() => {}}>
                 <Text className='text-lg text-white' strong>
                   {t('Chat'.toUpperCase())}
                 </Text>
               </Button>
-            </Link>
-            <Link activeClass='active' to='test3' spy={true} smooth={true}>
+            </Links>
+            <Links activeClass='active' to='test3' spy={true} smooth={true}>
               <Button type={'ghost'} onClick={() => {}}>
                 <Text className='text-lg text-white' strong>
                   {t('Other'.toUpperCase())}
                 </Text>
               </Button>
-            </Link>
+            </Links>
           </Space>
         </div>
         <div className='flex md:order-2 items-center'>
@@ -199,12 +199,12 @@ export default function Home () {
               console.log('hi')
             }}
           >
-            <a
+            <Link
+              className=''
               href='https://onedrive.live.com/download?cid=0A1E80E34D0A9499&resid=A1E80E34D0A9499%21178&authkey=ADkgz74cunti7zY'
-              className='text-xl text-white'
             >
               <Text className='text-xl text-white'>Download APP</Text>
-            </a>
+            </Link>
           </Button>
         </div>
       </div>
