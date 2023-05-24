@@ -295,6 +295,10 @@ export default function Home () {
               </div>
               <div className='ring-1 ring-slate-900/5'>
                 <Paragraph>
+                  <Text strong className='text-md ml-3'>
+                    Total :{' '}
+                  </Text>
+                  {diseaseList.length}
                   <ul style={{ marginLeft: '1em' }}>
                     {diseaseList.map((e, i) => {
                       if (i <= 8) {
@@ -325,6 +329,10 @@ export default function Home () {
                   {t('For skin disease prediction, there are the following')}
                 </Paragraph>
                 <Paragraph className='ring-1 ring-slate-900/5'>
+                  <Text strong className='text-md ml-3'>
+                    Total :{' '}
+                  </Text>
+                  {skinDiseaseList.length}
                   <ul style={{ marginLeft: '1em' }}>
                     {skinDiseaseList.map((e, i) => {
                       if (i <= 8) {
