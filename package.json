@@ -3,9 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn 6001CEM_FYP_CHATBOT_PYTHON.main:app --reload",
     "dev": "next dev",
     "build": "next build && next export",
-    "start": "next dev -p 8888",
+    "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
